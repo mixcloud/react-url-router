@@ -1,10 +1,10 @@
 {
-  "name": "react-router-alternative",
+  "name": "react-url-router",
   "version": "0.0.1",
-  "description": "An alternative to react-router",
+  "description": "An alternative to react-router that uses a url config",
   "repository": {
     "type": "git",
-    "url": "git://github.com/mixcloud/react-router-alternative.git"
+    "url": "git://github.com/mixcloud/react-url-router.git"
   },
   "main": "lib/index.js",
   "scripts": {
