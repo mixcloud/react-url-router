@@ -1,0 +1,63 @@
+{
+  "name": "react-router-alternative",
+  "version": "0.0.1",
+  "description": "An alternative to react-router",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mixcloud/react-router-alternative.git"
+  },
+  "main": "lib/index.js",
+  "scripts": {
+    "lint": "BABEL_ENV=test eslint --config=.eslintrc.js . --max-warnings=0",
+    "lint-fix": "BABEL_ENV=test eslint --config=.eslintrc.js . --fix",
+    "test": "BABEL_ENV=test jest --config=jest.config.json",
+    "test-watch": "BABEL_ENV=test jest --config=jest.config.json --watch --onlyChanged",
+    "flow": "flow .",
+    "compile": "BABEL_ENV=build babel --ignore __tests__,__mocks__ --out-dir lib/ src/",
+    "prepublish": "npm run compile"
+  },
+  "files": [
+    "LICENSE",
+    "README.md",
+    "lib/",
+    "src/"
+  ],
+  "keywords": [
+    "react",
+    "react-router",
+    "router"
+  ],
+  "author": {
+    "name": "Sam Cooke",
+    "email": "sam@mixcloud.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "hoist-non-react-statics": "^1.2.0",
+    "path-to-regexp": "^1.7.0"
+  },
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-cli": "^6.24.1",
+    "babel-eslint": "^7.2.3",
+    "babel-jest": "^20.0.3",
+    "babel-plugin-react-require": "^3.0.0",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "enzyme": "^2.8.2",
+    "eslint": "^3.19.0",
+    "eslint-plugin-flowtype": "^2.33.0",
+    "eslint-plugin-header": "^1.0.0",
+    "eslint-plugin-react": "^7.0.1",
+    "flow-bin": "^0.43.0",
+    "jest": "^20.0.4",
+    "jest-jasmine2": "^20.0.4",
+    "react-addons-test-utils": "^15.5.1"
+  },
+  "peerDependencies": {
+    "react": "15.4.2",
+    "react-dom": "15.4.2"
+  }
+}
