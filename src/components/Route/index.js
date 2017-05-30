@@ -2,6 +2,7 @@
 import React from 'react';
 import RouteRenderer from '../RouteRenderer';
 import type {WrappedComponent} from '../../utils';
+import type {Location} from '../../types';
 
 
 export type RouteProps = {
@@ -9,7 +10,8 @@ export type RouteProps = {
     exact?: boolean,
     strict?: boolean,
     component?: WrappedComponent,
-    render?: (props: *) => React.Element<*>
+    render?: (props: *) => React.Element<*>,
+    location?: ?Location
 };
 
 
@@ -18,6 +20,6 @@ export default class Route extends React.PureComponent {
     props: RouteProps;
 
     render() {
-        return <RouteRenderer routes={[this.props]} />;
+        return <RouteRenderer location={this.props.location} routes={[this.props]} />;
     }
 }

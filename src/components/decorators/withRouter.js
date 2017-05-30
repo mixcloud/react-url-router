@@ -41,12 +41,16 @@ export default (Component: WrappedComponent) => {
         render() {
             const {location, match, history, urls} = this.context.router;
             const props = {
+                ...this.props,
                 location,
-                ...this.props,  // Deliberately allowing this.props to override location
                 match,
                 history,
                 urls
             };
+            // Deliberately allowing this.props to override location
+            if (this.props.location) {
+                props.location = this.props.location;
+            }
             return <Component {...props} />;
         }
     }, componentName ? `WithRouter(${componentName})` : 'WithRouter');

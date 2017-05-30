@@ -50,9 +50,7 @@ describe('<Link>', () => {
             children: <div>Test</div>,
             href: "/u/x/?a=b",
             onClick: jasmine.any(Function),
-            style: {},
-            target: undefined,
-            className: 'testclass '
+            className: 'testclass'
         });
     });
 
@@ -87,8 +85,6 @@ describe('<Link>', () => {
             children: undefined,
             href: "/u/x/?a=b",
             onClick: jasmine.any(Function),
-            style: {},
-            target: undefined,
             className: 'testclass another'
         });
     });

@@ -10,7 +10,7 @@ import Router from './components/Router';
 import createServerHistory from './createServerHistory';
 
 
-export default {
+export {
     Urls,
     Router,
     Route,

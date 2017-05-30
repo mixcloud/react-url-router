@@ -28,7 +28,8 @@ export default withRouter(class extends React.PureComponent {
         } else if (render) {
             inner = render(props);
         }
-        return (
+
+        return this.props.urls.renderMatch(props,
             <RouteContext {...props}>
                 {inner}
             </RouteContext>
@@ -42,7 +43,7 @@ export default withRouter(class extends React.PureComponent {
             const {urlName, exact, strict, component, render} = route;
 
             if (!urlName) {
-                // Components with no urlName always match
+                // <Route>s with no urlName always match
                 return this.renderMatch(component, render);
             }
 

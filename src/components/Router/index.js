@@ -50,12 +50,19 @@ export default class Router extends React.Component {
         listen: this._listeners.listen
     };
 
+    _updateLocation = location => {
+        this.routerContext.location = location;
+        this._listeners.notify();
+    };
+
     componentDidMount() {
         const {history} = this.props;
-        this._unlisten = history.listen(location => {
-            this.routerContext.location = location;
-            this._listeners.notify();
-        });
+        this._unlisten = history.listen(this._updateLocation);
+
+        // To catch early redirects
+        if (history.location !== this.routerContext.location) {
+            this._updateLocation(history.location);
+        }
     }
 
     componentWillUnmount() {

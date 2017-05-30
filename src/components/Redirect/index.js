@@ -14,7 +14,7 @@ const Redirect = withRouter(class extends React.Component {
 
         if (serverResult) {
             // For server rendering
-            const {pathname, search} = this.props.urls.getForLink(this.props);
+            const {pathname, search} = this.props.urls.getForRedirect(this.props);
             serverResult.redirect = `${pathname}${search || ''}`;
         }
     }
@@ -23,9 +23,9 @@ const Redirect = withRouter(class extends React.Component {
         // For client rendering
         const {urls, history, replace, state} = this.props;
         if (replace) {
-            history.replace(urls.getForLink(this.props), state);
+            history.replace(urls.getForRedirect(this.props), state);
         } else {
-            history.push(urls.getForLink(this.props), state);
+            history.push(urls.getForRedirect(this.props), state);
         }
     }
 

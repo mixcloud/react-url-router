@@ -13,7 +13,7 @@ describe('<Redirect>', () => {
                 router: {
                     location: {},
                     urls: {
-                        getForLink({urlName, params}) {
+                        getForRedirect({urlName, params}) {
                             expect(urlName).toEqual('user:profile');
                             expect(params).toEqual({username: 'x'});
                             return {pathname: "/u/x/"};
@@ -39,7 +39,7 @@ describe('<Redirect>', () => {
                 router: {
                     location: {},
                     urls: {
-                        getForLink({urlName, params}) {
+                        getForRedirect({urlName, params}) {
                             expect(urlName).toEqual('user:profile');
                             expect(params).toEqual({username: 'x'});
                             return {pathname: "/u/x/"};
@@ -65,7 +65,7 @@ describe('<Redirect>', () => {
             router: {
                 location: {},
                 urls: {
-                    getForLink({urlName, params, query}) {
+                    getForRedirect({urlName, params, query}) {
                         expect(urlName).toEqual('user:profile');
                         expect(params).toEqual({username: 'x'});
                         expect(query).toEqual({a: 'b'});

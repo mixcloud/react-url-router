@@ -25,14 +25,14 @@ export default class Urls {
             const parsed = pathToRegexp.parse(pattern);
             const paramNames = Object.keys(params);
             const expectedParams = new Set(this.getExpectedParams(name));
-            parsed.forEach((token) => {
+            parsed.forEach(token => {
                 if (token.name && !token.optional && paramNames.indexOf(token.name) === -1) {
-                    throw Error(`param :${token.name} not provided`);
+                    throw Error(`param ${token.name} not provided for urlName ${name}`);
                 }
             });
-            paramNames.forEach((name) => {
-                if (!expectedParams.has(name)) {
-                    throw Error(`Unexpected param ${name} provided`);
+            paramNames.forEach(paramName => {
+                if (!expectedParams.has(paramName)) {
+                    throw Error(`Unexpected param ${paramName} provided for urlName ${name}`);
                 }
             });
         }
@@ -50,10 +50,19 @@ export default class Urls {
                      .join('&');
     }
 
-    // getForLink is called with the props of <Link> or <Redirect> and can be overridden
-    getForLink({urlName, params, query}: {urlName: string, params: Params, query?: ?Query}): Location {
+    _makeLocation({urlName, params, query}: {urlName: string, params: Params, query?: ?Query}): Location {
         const pathname = this.get(urlName, params);
         return query ? {pathname, search: `?${this.buildSearch(query)}`} : {pathname};
+    }
+
+    // getForRedirect is called with the props of <Redirect> and can be overridden
+    getForRedirect(props: {urlName: string, params: Params, query?: ?Query}): Location {
+        return this._makeLocation(props);
+    }
+
+    // getForLink is called with the props of <Link> and can be overridden
+    getForLink(props: {urlName: string, params: Params, query?: ?Query}): Location {
+        return this._makeLocation(props);
     }
 
     pattern(name: string): string {
@@ -124,5 +133,9 @@ export default class Urls {
             this._expectedParamsCache[name] = Array.from(expectedParams);
         }
         return this._expectedParamsCache[name];
+    }
+
+    renderMatch(props: {match: Match | null, location: Location}, children: any) {
+        return children;
     }
 }
