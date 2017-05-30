@@ -1,6 +1,6 @@
 {
   "name": "react-url-router",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "An alternative to react-router that uses a url config",
   "repository": {
     "type": "git",
