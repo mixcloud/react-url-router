@@ -39,8 +39,8 @@ export default withRouter(class extends React.PureComponent {
     render() {
         const {location, urls, routes} = this.props;
 
-        for (const route of routes) {
-            const {urlName, exact, strict, component, render} = route;
+        for (let i = 0; i < routes.length; i++) {
+            const {urlName, exact, strict, component, render} = routes[i];
 
             if (!urlName) {
                 // <Route>s with no urlName always match
@@ -49,8 +49,8 @@ export default withRouter(class extends React.PureComponent {
 
             const urlNames = Array.isArray(urlName) ? urlName : [urlName];
 
-            for (const urlName of urlNames) {
-                const match = urls.match(location.pathname, urlName, {strict, exact});
+            for (let j = 0; j < urlNames.length; j++) {
+                const match = urls.match(location.pathname, urlNames[j], {strict, exact});
                 if (match) {
                     if (this.context.router.serverResult) {
                         this.context.router.serverResult.hasMatched = true;
