@@ -45,6 +45,8 @@ describe('Urls', () => {
         expect(urls.makeLocation({urlName: 'home', params: {}})).toEqual({pathname: '/'});
         expect(urls.makeLocation({urlName: 'user:profile', params: {username: 'x'}})).toEqual({pathname: '/u/x/'});
         expect(urls.makeLocation({urlName: 'home', params: {}, query: {a: 'b'}})).toEqual({pathname: '/', search: '?a=b'});
+        expect(urls.makeLocation({to: '/something/?a=b', state: {c: 'd'}})).toEqual({pathname: '/something/', search: '?a=b', state: {c: 'd'}, hash: ""});
+        expect(urls.makeLocation({urlName: 'home', params: {}, query: {a: 'b'}, state: {c: 'd'}})).toEqual({pathname: '/', search: '?a=b', state: {c: 'd'}});
     });
 
     it('should provide expected params', () => {

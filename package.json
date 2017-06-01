@@ -10,7 +10,7 @@
   "scripts": {
     "lint": "BABEL_ENV=test eslint --config=.eslintrc.js . --max-warnings=0",
     "lint-fix": "BABEL_ENV=test eslint --config=.eslintrc.js . --fix",
-    "test": "BABEL_ENV=test jest --config=jest.config.json",
+    "test": "BABEL_ENV=test jest --config=jest.config.json --coverage",
     "test-watch": "BABEL_ENV=test jest --config=jest.config.json --watch --onlyChanged",
     "flow": "flow .",
     "compile": "babel --ignore __tests__,__mocks__ --out-dir lib/ src/",
