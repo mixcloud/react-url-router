@@ -5,36 +5,33 @@ import {RouterContextPropType} from '../Router';
 import type {RouterContextType} from '../Router';
 
 
-const Redirect = withRouter(class extends React.Component {
+class Redirect extends React.Component {
     static contextTypes = {router: RouterContextPropType};
     context: {router: RouterContextType};
+    static defaultProps = {
+        replace: false
+    };
 
     componentWillMount() {
         const {serverResult} = this.context.router;
 
         if (serverResult) {
             // For server rendering
-            const {pathname, search} = this.props.urls.getForRedirect(this.props);
-            serverResult.redirect = `${pathname}${search || ''}`;
+            const {pathname, search, hash} = this.props.urls.makeLocation(this.props);
+            serverResult.redirect = `${pathname}${search || ''}${hash || ''}`;
         }
     }
 
     componentDidMount() {
         // For client rendering
-        const {urls, history, replace, state} = this.props;
-        if (replace) {
-            history.replace(urls.getForRedirect(this.props), state);
-        } else {
-            history.push(urls.getForRedirect(this.props), state);
-        }
+        const {replace, navigate} = this.props;
+        navigate(this.props, replace);
     }
 
     render() {
         return null;
     }
-});
-
-Redirect.displayName = 'Redirect';
+}
 
 
-export default Redirect;
+export default withRouter(Redirect);

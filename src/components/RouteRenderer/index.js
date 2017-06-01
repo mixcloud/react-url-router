@@ -9,7 +9,7 @@ import type {Location} from '../../types';
 import type {RouteProps} from '../Route';
 
 
-export default withRouter(class extends React.PureComponent {
+class RouteRenderer extends React.PureComponent {
     static contextTypes = {router: RouterContextPropType};
     context: {router: RouterContextType};
 
@@ -62,4 +62,6 @@ export default withRouter(class extends React.PureComponent {
 
         return null;
     }
-});
+}
+
+export default withRouter(RouteRenderer);

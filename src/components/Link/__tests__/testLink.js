@@ -5,16 +5,17 @@ import {mount} from 'enzyme';
 
 
 describe('<Link>', () => {
-    var context, push, replace;
+    var context, navigate, replace;
 
     beforeEach(() => {
-        push = jest.fn();
         replace = jest.fn();
+        navigate = jest.fn();
         context = {
             router: {
+                linkMiddleware: [],
                 location: {},
                 urls: {
-                    getForLink({urlName, params, query}) {
+                    makeLocation({urlName, params, query}) {
                         expect(urlName).toEqual('user:profile');
                         expect(params).toEqual({username: 'x'});
                         expect(query).toEqual({a: 'b'});
@@ -24,8 +25,8 @@ describe('<Link>', () => {
                         return {};
                     }
                 },
+                navigate,
                 history: {
-                    push,
                     replace,
                     createHref(location) {
                         expect(location).toEqual({pathname: "/u/x/", search: "?a=b"});
@@ -60,8 +61,7 @@ describe('<Link>', () => {
             {context}
         );
         wrapper.simulate('click', {button: 0});
-        expect(replace).not.toBeCalled();
-        expect(push).toBeCalledWith({pathname: "/u/x/", search: "?a=b"}, {statevar: 1});
+        expect(navigate).toBeCalledWith(jasmine.objectContaining({urlName: "user:profile", params: {username: 'x'}, query: {a: 'b'}, state: {statevar: 1}}), false);
     });
 
     it('should replace if instructed', () => {
@@ -70,8 +70,7 @@ describe('<Link>', () => {
             {context}
         );
         wrapper.simulate('click', {button: 0});
-        expect(push).not.toBeCalled();
-        expect(replace).toBeCalledWith({pathname: "/u/x/", search: "?a=b"}, {statevar: 1});
+        expect(navigate).toBeCalledWith(jasmine.objectContaining({urlName: "user:profile", params: {username: 'x'}, query: {a: 'b'}, state: {statevar: 1}}), true);
     });
 
     it('should have active styles when appropriate', () => {

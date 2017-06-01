@@ -2,7 +2,7 @@
 import React, {Children, PropTypes} from 'react';
 import {Listeners} from '../../utils';
 import type Urls from '../../urls';
-import type {Match, History, Location, ServerResult} from '../../types';
+import type {LinkProps, LinkMiddleware, Match, History, Location, ServerResult, Navigate} from '../../types';
 
 
 export type RouterContextType = {|
@@ -11,7 +11,9 @@ export type RouterContextType = {|
     urls: Urls,
     match: Match | null,
     location: Location,
-    listen: (callback: () => void) => () => void
+    listen: (callback: () => void) => () => void,
+    linkMiddleware: LinkMiddleware[],
+    navigate: Navigate
 |};
 
 export const RouterContextPropType = PropTypes.shape({
@@ -20,7 +22,9 @@ export const RouterContextPropType = PropTypes.shape({
     urls: PropTypes.object.isRequired,
     match: PropTypes.object,
     location: PropTypes.object.isRequired,
-    listen: PropTypes.func.isRequired
+    listen: PropTypes.func.isRequired,
+    linkMiddleware: PropTypes.arrayOf(PropTypes.func).isRequired,
+    navigate: PropTypes.func.isRequired
 }).isRequired;
 
 
@@ -28,6 +32,7 @@ type RouterProps = {
     history: History,
     urls: Urls,
     serverResult?: ServerResult,
+    linkMiddleware: LinkMiddleware[],
     children?: ?any
 };
 
@@ -35,6 +40,9 @@ type RouterProps = {
 export default class Router extends React.Component {
     static displayName = 'Router';
     props: RouterProps;
+    static defaultProps = {
+        linkMiddleware: []
+    };
 
     _listeners = new Listeners();
     _unlisten: ?() => void;
@@ -47,7 +55,16 @@ export default class Router extends React.Component {
         urls: this.props.urls,
         location: this.props.history.location,
         match: null,
-        listen: this._listeners.listen
+        listen: this._listeners.listen,
+        linkMiddleware: this.props.linkMiddleware,
+        navigate: (props: LinkProps, replace: ?boolean = false) => {
+            const location = this.routerContext.urls.makeLocation(props);
+            if (replace) {
+                this.routerContext.history.replace(location);
+            } else {
+                this.routerContext.history.push(location);
+            }
+        }
     };
 
     _updateLocation = location => {

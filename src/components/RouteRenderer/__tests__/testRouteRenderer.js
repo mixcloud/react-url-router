@@ -12,7 +12,9 @@ const context = {
         history: {},
         location: {},
         urls,
-        listen: () => () => {}
+        listen: () => () => {},
+        linkMiddleware: [],
+        navigate: () => {}
     }
 };
 

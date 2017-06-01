@@ -39,13 +39,14 @@ export default (Component: WrappedComponent) => {
         }
 
         render() {
-            const {location, match, history, urls} = this.context.router;
+            const {location, match, history, urls, navigate} = this.context.router;
             const props = {
                 ...this.props,
                 location,
                 match,
                 history,
-                urls
+                urls,
+                navigate
             };
             // Deliberately allowing this.props to override location
             if (this.props.location) {

@@ -1,6 +1,7 @@
 /* @flow */
+import {parsePath} from 'history/PathUtils';
 import pathToRegexp from 'path-to-regexp';
-import type {UrlConf, Params, Query, Match, Location} from './types';
+import type {UrlConf, LinkProps, Params, Query, Match, Location} from './types';
 
 
 const PLUS = /%2B/g;
@@ -50,19 +51,35 @@ export default class Urls {
                      .join('&');
     }
 
-    _makeLocation({urlName, params, query}: {urlName: string, params: Params, query?: ?Query}): Location {
-        const pathname = this.get(urlName, params);
-        return query ? {pathname, search: `?${this.buildSearch(query)}`} : {pathname};
-    }
-
-    // getForRedirect is called with the props of <Redirect> and can be overridden
-    getForRedirect(props: {urlName: string, params: Params, query?: ?Query}): Location {
-        return this._makeLocation(props);
-    }
-
-    // getForLink is called with the props of <Link> and can be overridden
-    getForLink(props: {urlName: string, params: Params, query?: ?Query}): Location {
-        return this._makeLocation(props);
+    makeLocation(
+        {urlName, params, query, state, to, hash}: LinkProps,
+        // Providing this as a hook in case you want to put a different url in the href to the one you navigate to, or
+        // if you want to only build state when the user is actually navigating
+        forHref: boolean = false  // eslint-disable-line no-unused-vars
+    ): Location {
+        if (to) {
+            if (process.env.NODE_ENV !== 'production' && (urlName || Object.keys(params || {}).length || Object.keys(query || {}).length || hash)) {
+                throw Error(`urlName, params, query, and hash should not be used with "to" (makeLocation(${JSON.stringify({urlName, params, query, to, hash})}))`);
+            }
+            return {
+                ...parsePath(to),
+                state
+            };
+        }
+        if (!urlName) {
+            throw Error(`urlName not provided to makeLocation`);
+        }
+        const location: Location = {pathname: this.get(urlName, params || {})};
+        if (hash) {
+            location.hash = hash;
+        }
+        if (state) {
+            location.state = state;
+        }
+        if (query) {
+            location.search = `?${this.buildSearch(query)}`;
+        }
+        return location;
     }
 
     pattern(name: string): string {
