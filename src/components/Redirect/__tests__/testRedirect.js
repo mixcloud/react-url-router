@@ -15,7 +15,7 @@ describe('<Redirect>', () => {
                 linkMiddleware: [],
                 location: {},
                 urls: {
-                    makeLocation({urlName, params, query}) {
+                    makeLocation({urlName, params}) {
                         expect(urlName).toEqual('user:profile');
                         expect(params).toEqual({username: 'x'});
                         return {pathname: "/u/x/", search: '?a=b'};
@@ -39,12 +39,12 @@ describe('<Redirect>', () => {
 
     it('should redirect on mount', () => {
         mount(<Redirect urlName="user:profile" params={{username: 'x'}} state={{statevar: 1}} />, {context});
-        expect(navigate).toBeCalledWith(jasmine.objectContaining({urlName: "user:profile", params:{username: 'x'}, state: {statevar: 1}}), false);
+        expect(navigate).toBeCalledWith(jasmine.objectContaining({urlName: "user:profile", params: {username: 'x'}, state: {statevar: 1}}), false);
     });
 
     it('should replace if instructed', () => {
         mount(<Redirect urlName="user:profile" params={{username: 'x'}} state={{statevar: 1}} replace={true} />, {context});
-        expect(navigate).toBeCalledWith(jasmine.objectContaining({urlName: "user:profile", params:{username: 'x'}, state: {statevar: 1}}), true);
+        expect(navigate).toBeCalledWith(jasmine.objectContaining({urlName: "user:profile", params: {username: 'x'}, state: {statevar: 1}}), true);
     });
 
     it('should update serverResult if provided', () => {
