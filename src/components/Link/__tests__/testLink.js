@@ -13,7 +13,9 @@ describe('<Link>', () => {
         context = {
             router: {
                 linkMiddleware: [],
-                location: {},
+                location: {
+                    pathname: '/u/x/'
+                },
                 urls: {
                     makeLocation({urlName, params, query}) {
                         expect(urlName).toEqual('user:profile');
@@ -21,8 +23,9 @@ describe('<Link>', () => {
                         expect(query).toEqual({a: 'b'});
                         return {pathname: "/u/x/", search: '?a=b'};
                     },
-                    match() {
-                        return {};
+                    match(pathname, urlName) {
+                        expect(urlName).toEqual('user:profile');
+                        return {params: {username: pathname.split("/")[2]}};
                     }
                 },
                 navigate,
@@ -74,11 +77,26 @@ describe('<Link>', () => {
     });
 
     it('should have active styles when appropriate', () => {
-        const wrapper = mount(
+        context.router.location.pathname = '/u/a/';
+        let wrapper = mount(
             <Link activeClassName="another" className="testclass" urlName="user:profile" params={{username: 'x'}} query={{a: 'b'}} />,
             {context}
         );
-        const a = wrapper.find('a');
+        let a = wrapper.find('a');
+        expect(a.length).toEqual(1);
+        expect(a.props()).toEqual({
+            children: undefined,
+            href: "/u/x/?a=b",
+            onClick: jasmine.any(Function),
+            className: 'testclass'
+        });
+
+        context.router.location.pathname = '/u/x/';
+        wrapper = mount(
+            <Link activeClassName="another" className="testclass" urlName="user:profile" params={{username: 'x'}} query={{a: 'b'}} />,
+            {context}
+        );
+        a = wrapper.find('a');
         expect(a.length).toEqual(1);
         expect(a.props()).toEqual({
             children: undefined,

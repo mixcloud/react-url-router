@@ -1,5 +1,6 @@
 /* @flow */
 import React from 'react';
+import deepEqual from 'deep-equal';
 import withRouter from '../decorators/withRouter';
 import {RouterContextPropType} from '../Router';
 import type Urls from '../../urls';
@@ -83,7 +84,7 @@ class Link extends React.PureComponent {
     };
 
     isActive = () => {
-        const {urls, location, urlName, exact, strict, isActive} = this.props;
+        const {urls, location, urlName, params, exact, strict, isActive} = this.props;
 
         if (!urlName) {
             return false;
@@ -95,6 +96,9 @@ class Link extends React.PureComponent {
             return isActive(match, location);
         }
 
+        if (match && params) {
+            return deepEqual(match.params, params);
+        }
         return !!match;
     };
 
