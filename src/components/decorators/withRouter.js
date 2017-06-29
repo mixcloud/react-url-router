@@ -24,15 +24,21 @@ export default (Component: WrappedComponent) => {
 
         unlisten: ?() => void;
 
+        mounted: boolean = false;
+
         componentDidMount() {
             const {router} = this.context;
+            this.mounted = true;
             this.unlisten = router.listen(() => {
                 const {location, match} = router;
-                this.setState({location, match});
+                if (this.mounted) {
+                    this.setState({location, match});
+                }
             });
         }
 
         componentWillUnmount() {
+            this.mounted = false;
             if (this.unlisten) {
                 this.unlisten();
             }
