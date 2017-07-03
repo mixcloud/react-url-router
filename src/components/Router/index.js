@@ -30,18 +30,21 @@ export const RouterContextPropType = PropTypes.shape({
 
 type RouterProps = {
     history: History,
+    addSlashes: boolean,
     urls: Urls,
     serverResult?: ServerResult,
     linkMiddleware: LinkMiddleware[],
     children?: ?any
 };
 
+const SLASH_RE = /\/$/;
 
 export default class Router extends React.Component {
     static displayName = 'Router';
     props: RouterProps;
     static defaultProps = {
-        linkMiddleware: []
+        linkMiddleware: [],
+        addSlashes: false
     };
 
     _listeners = new Listeners();
@@ -59,6 +62,7 @@ export default class Router extends React.Component {
         linkMiddleware: this.props.linkMiddleware,
         navigate: (props: LinkProps, replace: ?boolean = false) => {
             const location = this.routerContext.urls.makeLocation(props);
+
             if (replace) {
                 this.routerContext.history.replace(location);
             } else {
@@ -68,18 +72,41 @@ export default class Router extends React.Component {
     };
 
     _updateLocation = location => {
-        this.routerContext.location = location;
+        let finalLocation = location;
+
+        if (this.props.addSlashes) {
+            const redirectPath = this._slashUrlPath(location);
+            if (redirectPath) {
+                finalLocation = this.routerContext.urls.makeLocation({to: redirectPath});
+
+                this.routerContext.history.replace(finalLocation);
+            }
+        }
+
+        this.routerContext.location = finalLocation;
         this._listeners.notify();
     };
+
+    _slashUrlPath = location => {
+        // See if there is a url with slashes that we can redirect to
+        const {pathname, search} = location;
+        if (!pathname.match(SLASH_RE)) {
+            const pathNameWithSlash = `${pathname}/`;
+            for (const urlName of this.routerContext.urls.getAllUrlNames()) {
+                if (this.routerContext.urls.match(pathNameWithSlash, urlName, {strict: true, exact: true})) {
+                    return `${pathNameWithSlash}${search ? `?${search}` : ''}`;
+                }
+            }
+        }
+        return null;  // no redirect needed
+    }
 
     componentDidMount() {
         const {history} = this.props;
         this._unlisten = history.listen(this._updateLocation);
 
         // To catch early redirects
-        if (history.location !== this.routerContext.location) {
-            this._updateLocation(history.location);
-        }
+        this._updateLocation(history.location, true);
     }
 
     componentWillUnmount() {
