@@ -83,8 +83,10 @@ export default class Router extends React.Component {
             }
         }
 
-        this.routerContext.location = finalLocation;
-        this._listeners.notify();
+        if (finalLocation !== this.routerContext.location) {
+            this.routerContext.location = finalLocation;
+            this._listeners.notify();
+        }
     };
 
     _slashUrlPath = location => {
@@ -106,7 +108,7 @@ export default class Router extends React.Component {
         this._unlisten = history.listen(this._updateLocation);
 
         // To catch early redirects
-        this._updateLocation(history.location, true);
+        this._updateLocation(history.location);
     }
 
     componentWillUnmount() {
