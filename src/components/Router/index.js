@@ -75,10 +75,9 @@ export default class Router extends React.Component {
         let finalLocation = location;
 
         if (this.props.addSlashes) {
-            const redirectPath = this._slashUrlPath(location);
-            if (redirectPath) {
-                finalLocation = this.routerContext.urls.makeLocation({to: redirectPath});
-
+            const redirectLocation = this._slashUrlPath(location);
+            if (redirectLocation) {
+                finalLocation = redirectLocation;
                 this.routerContext.history.replace(finalLocation);
             }
         }
@@ -91,17 +90,25 @@ export default class Router extends React.Component {
 
     _slashUrlPath = location => {
         // See if there is a url with slashes that we can redirect to
-        const {pathname, search} = location;
-        if (!pathname.match(SLASH_RE)) {
-            const pathNameWithSlash = `${pathname}/`;
-            for (const urlName of this.routerContext.urls.getAllUrlNames()) {
-                if (this.routerContext.urls.match(pathNameWithSlash, urlName, {strict: true, exact: true})) {
-                    return `${pathNameWithSlash}${search ? `?${search}` : ''}`;
-                }
+        const {pathname} = location;
+
+        if (pathname.match(SLASH_RE)) {
+            return null;
+        }
+
+        const {urls} = this.routerContext;
+
+        for (const urlName of urls.getAllUrlNames()) {
+            if (urls.match(pathname, urlName, {strict: true, exact: true})) {
+                return null;
             }
         }
-        return null;  // no redirect needed
-    }
+
+        return {
+            ...location,
+            pathname: `${pathname}/`
+        };
+    };
 
     componentDidMount() {
         const {history} = this.props;
