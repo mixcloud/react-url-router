@@ -98,6 +98,7 @@ export default class Router extends React.Component {
 
         const {urls} = this.routerContext;
 
+        // Do not redirect if the current url matches something in urls
         for (const urlName of urls.getAllUrlNames()) {
             if (urls.match(pathname, urlName, {strict: true, exact: true})) {
                 return null;
