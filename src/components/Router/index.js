@@ -1,5 +1,6 @@
 /* @flow */
-import React, {Children, PropTypes} from 'react';
+import React, {Children} from 'react';
+import PropTypes from 'prop-types';
 import {Listeners} from '../../utils';
 import type Urls from '../../urls';
 import type {LinkProps, LinkMiddleware, Match, History, Location, ServerResult, Navigate} from '../../types';

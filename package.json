@@ -60,7 +60,7 @@
     "react-addons-test-utils": "^15.5.1"
   },
   "peerDependencies": {
-    "react": "15.4.2",
-    "react-dom": "15.4.2"
+    "react": "15.6.1",
+    "react-dom": "15.6.1"
   }
 }
