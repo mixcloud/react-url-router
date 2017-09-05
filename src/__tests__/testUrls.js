@@ -33,6 +33,10 @@ describe('Urls', () => {
         }).toThrow();
     });
 
+    it('should handle unicode params', () => {
+        expect(urls.get('user:profile', {username: 'caffè-però'})).toEqual('/u/caffè-però/');
+    });
+
     it('should generate a querystring', () => {
         expect(urls.buildSearch({})).toEqual('');
         expect(urls.buildSearch({a: 'b'})).toEqual('a=b');
