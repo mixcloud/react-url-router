@@ -41,8 +41,12 @@ export default class Urls {
         if (!this._getCompileCache.hasOwnProperty(name)) {
             this._getCompileCache[name] = pathToRegexp.compile(pattern);
         }
+        // Should be a path like /jon/my-cloudcast/
+        var pathString = this._getCompileCache[name](params);
+        // Should handle unicode characters - see https://github.com/pillarjs/path-to-regexp/issues/42
+        pathString = decodeURI(pathString);
         // Replacements to undo url encoding of `+` and `:` so that discover urls look nice
-        return this._getCompileCache[name](params).replace(PLUS, '+').replace(COLON, ':');
+        return pathString.replace(PLUS, '+').replace(COLON, ':');
     }
 
     buildSearch(query: Query) {
