@@ -5,7 +5,7 @@ import withRouter from '../decorators/withRouter';
 import {RouterContextPropType} from '../Router';
 import type {RouterContextType} from '../Router';
 import type Urls from '../../urls';
-import type {Location} from '../../types';
+import type {Location, OnNavigateCallback} from '../../types';
 import type {RouteProps} from '../Route';
 
 
@@ -16,17 +16,22 @@ class RouteRenderer extends React.PureComponent {
     props: {
         routes: RouteProps[],
         urls: Urls,
-        location: Location
+        location: Location,
+        onNavigate?: ?OnNavigateCallback
     };
 
     renderMatch(Component, render, match = null) {
-        const {location} = this.props;
+        const {location, onNavigate} = this.props;
         const props = {location, match};
         var inner = null;
         if (Component) {
             inner = <Component {...props} />;
         } else if (render) {
             inner = render(props);
+        }
+
+        if (onNavigate) {
+            onNavigate({location: location, match: match});
         }
 
         return this.props.urls.renderMatch(props,

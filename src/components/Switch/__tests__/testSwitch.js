@@ -25,6 +25,24 @@ describe('<Switch />', () => {
         });
     });
 
+    it('should render a <RouteRenderer /> with onNavigate', () => {
+        const onNavigate = () => {};
+        const wrapper = shallow(
+            <Switch onNavigate={onNavigate}>
+                <Route prop1="test" />
+                <Route prop2="test2" />
+            </Switch>
+        );
+        expect(wrapper.node.type).toBe(RouteRenderer);
+        expect(wrapper.node.props).toEqual({
+            routes: [
+                {prop1: 'test'},
+                {prop2: 'test2'}
+            ],
+            onNavigate
+        });
+    });
+
     it('should complain about invalid children', () => {
         expect(() => {
             shallow(
