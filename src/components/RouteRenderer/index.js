@@ -31,7 +31,7 @@ class RouteRenderer extends React.PureComponent {
         }
 
         if (onNavigate) {
-            onNavigate({location: location, match: match});
+            onNavigate({location, match});
         }
 
         return this.props.urls.renderMatch(props,
