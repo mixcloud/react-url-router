@@ -58,3 +58,6 @@ export type Navigate = (props: LinkProps, replace: ?boolean) => void;
 
 
 export type LinkMiddleware = (props: LinkProps, next: (props: LinkProps) => React.Element<*>) => React.Element<*>;
+
+
+export type OnNavigateCallback = ({location: Location, match: ?Match}) => void;
