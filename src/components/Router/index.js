@@ -3,7 +3,7 @@ import React, {Children} from 'react';
 import PropTypes from 'prop-types';
 import {Listeners} from '../../utils';
 import type Urls from '../../urls';
-import type {LinkProps, LinkMiddleware, Match, History, Location, ServerResult, Navigate} from '../../types';
+import type {LinkProps, LinkMiddleware, Match, History, Location, ServerResult, Navigate, OnClickCallback} from '../../types';
 
 
 export type RouterContextType = {|
@@ -35,7 +35,8 @@ type RouterProps = {
     urls: Urls,
     serverResult?: ServerResult,
     linkMiddleware: LinkMiddleware[],
-    children?: ?any
+    children?: ?any,
+    onClickCallback?: ?OnClickCallback
 };
 
 const SLASH_RE = /\/$/;
@@ -69,7 +70,8 @@ export default class Router extends React.Component {
             } else {
                 this.routerContext.history.push(location);
             }
-        }
+        },
+        onClickCallback: this.props.onClickCallback
     };
 
     _updateLocation = location => {

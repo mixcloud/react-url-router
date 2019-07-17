@@ -48,15 +48,22 @@ type Props = {
     target?: string,
     onClick?: (event: MouseEvent) => void,
     children?: any,
-    isActive?: (match: Match | null, location: Location) => boolean
+    isActive?: (match: Match | null, location: Location) => boolean,
+    name?: ?String
 };
 
 
 class Link extends React.PureComponent {
+    static contextTypes = {router: RouterContextPropType};
+    context: {router: RouterContextType};
     props: Props;
 
     onClick = (event) => {
-        const {onClick, location, history, target, replace, navigate} = this.props;
+        const {onClick, location, history, target, replace, navigate, urlName, name} = this.props;
+
+        if (this.context.router.onClickCallback) {
+            this.context.router.onClickCallback({location, urlName, name});
+        }
 
         if (onClick) {
             onClick(event);
@@ -154,4 +161,3 @@ class LinkWithMiddleware extends React.PureComponent {
 }
 
 export default withRouter(LinkWithMiddleware);
-
