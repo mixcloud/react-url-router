@@ -49,7 +49,7 @@ type Props = {
     onClick?: (event: MouseEvent) => void,
     children?: any,
     isActive?: (match: Match | null, location: Location) => boolean,
-    name?: ?String
+    name?: ?string
 };
 
 
