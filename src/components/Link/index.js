@@ -58,6 +58,18 @@ class Link extends React.PureComponent {
     context: {router: RouterContextType};
     props: Props;
 
+    ref = null;
+
+    setRef = (e: HTMLElement | null) => {
+        if (this.ref && !e) {
+            delete this.context.router.visibleRefProps[this.ref];
+        }
+        if (e) {
+            this.context.router.visibleRefProps[e] = this.props;
+        }
+        this.ref = e;
+    };
+
     onClick = (event) => {
         const {onClick, location, history, target, replace, navigate, urlName, name} = this.props;
 
@@ -135,7 +147,7 @@ class Link extends React.PureComponent {
             }
         }
 
-        return <a {...props} />;
+        return <a ref={this.setRef} {...props} />;
     }
 }
 

@@ -2,8 +2,9 @@
 import React, {Children} from 'react';
 import PropTypes from 'prop-types';
 import {Listeners} from '../../utils';
+import {checkRefVisibility} from '../Link/visibility';
 import type Urls from '../../urls';
-import type {LinkProps, LinkMiddleware, Match, History, Location, ServerResult, Navigate, OnClickCallback} from '../../types';
+import type {LinkProps, LinkMiddleware, Match, History, Location, ServerResult, Navigate, OnClickCallback, OnVisibilityCallback} from '../../types';
 
 
 export type RouterContextType = {|
@@ -36,7 +37,8 @@ type RouterProps = {
     serverResult?: ServerResult,
     linkMiddleware: LinkMiddleware[],
     children?: ?any,
-    onClickCallback?: ?OnClickCallback
+    onClickCallback?: ?OnClickCallback,
+    onVisibilityCallback?: ?OnVisibilityCallback
 };
 
 const SLASH_RE = /\/$/;
@@ -71,7 +73,8 @@ export default class Router extends React.Component {
                 this.routerContext.history.push(location);
             }
         },
-        onClickCallback: this.props.onClickCallback
+        onClickCallback: this.props.onClickCallback,
+        visibleRefProps: {}
     };
 
     _updateLocation = location => {
@@ -90,6 +93,12 @@ export default class Router extends React.Component {
             this._listeners.notify();
         }
     };
+
+    _visibleRefChecker = () => {
+        if (this.props.onVisibilityCallback) {
+            checkRefVisibility(this.routerContext.visibleRefProps, this.props.onVisibilityCallback);
+        }
+    }
 
     _slashUrlPath = location => {
         // See if there is a url with slashes that we can redirect to
@@ -118,6 +127,8 @@ export default class Router extends React.Component {
         const {history} = this.props;
         this._unlisten = history.listen(this._updateLocation);
 
+        window.addEventListener("scroll", this._visibleRefChecker, true);
+
         // To catch early redirects
         this._updateLocation(history.location);
     }
@@ -126,6 +137,7 @@ export default class Router extends React.Component {
         if (this._unlisten) {
             this._unlisten();
         }
+        window.removeEventListener("scroll", this._visibleRefChecker, true);
     }
 
     render() {
