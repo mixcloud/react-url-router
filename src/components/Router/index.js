@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {Listeners} from '../../utils';
 import {checkRefVisibility} from '../Link/visibility';
 import type Urls from '../../urls';
-import type {LinkProps, LinkMiddleware, Match, History, Location, ServerResult, Navigate, OnClickCallback, OnVisibilityCallback} from '../../types';
+import type {LinkCallbackProps, LinkProps, LinkMiddleware, Match, History, Location, ServerResult, Navigate, OnClickCallback, OnVisibilityCallback} from '../../types';
 
 
 export type RouterContextType = {|
@@ -15,7 +15,10 @@ export type RouterContextType = {|
     location: Location,
     listen: (callback: () => void) => () => void,
     linkMiddleware: LinkMiddleware[],
-    navigate: Navigate
+    navigate: Navigate,
+    onClickCallback?: OnClickCallback | null,
+    onVisibilityCallback?: OnVisibilityCallback | null,
+    visibleRefProps: Map<HTMLElement, LinkCallbackProps>
 |};
 
 export const RouterContextPropType = PropTypes.shape({
@@ -74,7 +77,7 @@ export default class Router extends React.Component {
             }
         },
         onClickCallback: this.props.onClickCallback,
-        visibleRefProps: {}
+        visibleRefProps: new Map()
     };
 
     _updateLocation = location => {

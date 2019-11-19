@@ -53,6 +53,14 @@ export type LinkProps = {
     to?: ?string
 };
 
+export type LinkCallbackProps = {
+    location: Location,
+    name: ?string,
+    params?: ?Params,
+    text: ?string,
+    urlName?: ?string
+};
+
 
 export type Navigate = (props: LinkProps, replace: ?boolean) => void;
 
@@ -61,3 +69,9 @@ export type LinkMiddleware = (props: LinkProps, next: (props: LinkProps) => Reac
 
 
 export type OnNavigateCallback = ({location: Location, match: ?Match}) => void;
+
+
+export type OnClickCallback = (props: LinkCallbackProps) => void;
+
+
+export type OnVisibilityCallback = (props: LinkCallbackProps) => void;

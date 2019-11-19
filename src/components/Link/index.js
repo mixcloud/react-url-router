@@ -3,6 +3,7 @@ import React from 'react';
 import deepEqual from 'deep-equal';
 import withRouter from '../decorators/withRouter';
 import {RouterContextPropType} from '../Router';
+import {onlyText} from './utils';
 import type Urls from '../../urls';
 import type {Params, Query, History, Match, Location} from '../../types';
 import type {RouterContextType} from '../Router';
@@ -57,24 +58,29 @@ class Link extends React.PureComponent {
     static contextTypes = {router: RouterContextPropType};
     context: {router: RouterContextType};
     props: Props;
-
-    ref = null;
+    ref: HTMLElement | null
 
     setRef = (e: HTMLElement | null) => {
         if (this.ref && !e) {
-            delete this.context.router.visibleRefProps[this.ref];
+            this.context.router.visibleRefProps.delete(this.ref);
         }
         if (e) {
-            this.context.router.visibleRefProps[e] = this.props;
+            this.context.router.visibleRefProps.set(e, this._getCallbackProps());
         }
         this.ref = e;
     };
 
-    onClick = (event) => {
-        const {onClick, location, history, target, replace, navigate, urlName, name} = this.props;
+    _getCallbackProps = () => {
+        const {children, location, name, params, urlName} = this.props;
+        return {location, name, params, text: onlyText(children), urlName};
+    }
 
-        if (this.context.router.onClickCallback) {
-            this.context.router.onClickCallback({location, urlName, name});
+    onClick = (event) => {
+        const {onClick, location, history, target, replace, navigate} = this.props;
+
+        const onClickCallback = this.context.router.onClickCallback;
+        if (onClickCallback) {
+            onClickCallback(this._getCallbackProps());
         }
 
         if (onClick) {
