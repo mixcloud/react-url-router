@@ -37,8 +37,7 @@
     "deep-equal": "^1.0.1",
     "history": "4.6.1",
     "hoist-non-react-statics": "^1.2.0",
-    "path-to-regexp": "^1.7.0",
-    "throttle-debounce": "1.0.1"
+    "path-to-regexp": "^1.7.0"
   },
   "devDependencies": {
     "babel": "^6.23.0",
