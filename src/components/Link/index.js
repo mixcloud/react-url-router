@@ -5,7 +5,7 @@ import withRouter from '../decorators/withRouter';
 import {RouterContextPropType} from '../Router';
 import {onlyText} from './utils';
 import type Urls from '../../urls';
-import type {Params, Query, History, Match, Location} from '../../types';
+import type {Params, Query, History, Match, Location, LinkCallbackProps} from '../../types';
 import type {RouterContextType} from '../Router';
 
 
@@ -69,7 +69,7 @@ class Link extends React.PureComponent {
         this.ref = e;
     };
 
-    _getCallbackProps = () => {
+    _getCallbackProps = (): LinkCallbackProps => {
         const {children, location, name, params, urlName} = this.props;
         return {location, name, params, text: onlyText(children), urlName};
     }
