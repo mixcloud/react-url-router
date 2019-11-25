@@ -144,7 +144,7 @@ export default class Router extends React.Component {
             this._unlisten();
         }
         if (this._visibilityInterval) {
-            clearTimeout(this._visibilityInterval);
+            clearInterval(this._visibilityInterval);
             this._visibilityInterval = null;
         }
     }

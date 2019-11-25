@@ -61,11 +61,10 @@ class Link extends React.PureComponent {
     ref: HTMLElement | null
 
     setRef = (e: HTMLElement | null) => {
-        if (this.ref && !e) {
-            this.context.router.visibleRefProps.delete(this.ref);
-        }
         if (e) {
             this.context.router.visibleRefProps.set(e, this._getCallbackProps());
+        } else if (this.ref) {
+            this.context.router.visibleRefProps.delete(this.ref);
         }
         this.ref = e;
     };
