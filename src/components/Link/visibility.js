@@ -1,10 +1,7 @@
 /* @flow */
-import throttle from 'throttle-debounce/throttle';
+import type {OnVisibilityCallback, RefProps} from '../../types';
 
-const DELAY = 200;
-
-
-export const checkRefVisibility = throttle(DELAY, (refProps, callback) => {
+export const checkRefVisibility = (refProps: RefProps, callback: OnVisibilityCallback) => {
     const bottom = window.innerHeight || (document && document.documentElement && document.documentElement.clientHeight);
     const right = window.innerWidth || (document && document.documentElement && document.documentElement.clientWidth);
 
@@ -23,4 +20,4 @@ export const checkRefVisibility = throttle(DELAY, (refProps, callback) => {
             }
         }
     });
-});
+};

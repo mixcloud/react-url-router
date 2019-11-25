@@ -75,3 +75,6 @@ export type OnClickCallback = (props: LinkCallbackProps) => void;
 
 
 export type OnVisibilityCallback = (props: LinkCallbackProps) => void;
+
+
+export type RefProps = Map<HTMLElement, LinkCallbackProps>;
