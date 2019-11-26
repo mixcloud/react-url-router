@@ -50,7 +50,8 @@ type Props = {
     onClick?: (event: MouseEvent) => void,
     children?: any,
     isActive?: (match: Match | null, location: Location) => boolean,
-    name?: ?string
+    name?: ?string,
+    trackingContext?: ?Array<any>
 };
 
 
@@ -70,8 +71,8 @@ class Link extends React.PureComponent {
     };
 
     _getCallbackProps = (): LinkCallbackProps => {
-        const {children, location, name, params, urlName} = this.props;
-        return {location, name, params, text: onlyText(children), urlName};
+        const {children, location, name, params, trackingContext, urlName} = this.props;
+        return {location, name, params, text: onlyText(children), trackingContext, urlName};
     }
 
     onClick = (event) => {

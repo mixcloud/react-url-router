@@ -1,5 +1,6 @@
 /* @flow */
 import React from 'react';
+import type Urls from './urls';
 
 
 export type ServerResult = {
@@ -50,7 +51,8 @@ export type LinkProps = {
     query?: ?Query,
     state?: ?State,
     hash?: ?string,
-    to?: ?string
+    to?: ?string,
+    trackingContext?: ?Array<any>
 };
 
 export type LinkCallbackProps = {
@@ -58,7 +60,8 @@ export type LinkCallbackProps = {
     name: ?string,
     params?: ?Params,
     text: ?string,
-    urlName?: ?string
+    urlName?: ?string,
+    trackingContext?: ?Array<any>
 };
 
 
@@ -78,3 +81,15 @@ export type OnVisibilityCallback = (props: LinkCallbackProps) => void;
 
 
 export type RefProps = Map<HTMLElement, LinkCallbackProps>;
+
+
+export type RouterProps = {
+    history: History,
+    addSlashes: boolean,
+    urls: Urls,
+    serverResult?: ServerResult,
+    linkMiddleware: LinkMiddleware[],
+    children?: ?any,
+    onClickCallback?: ?OnClickCallback,
+    onVisibilityCallback?: ?OnVisibilityCallback
+};

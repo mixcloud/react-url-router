@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {Listeners} from '../../utils';
 import {checkRefVisibility} from '../Link/visibility';
 import type Urls from '../../urls';
-import type {RefProps, LinkProps, LinkMiddleware, Match, History, Location, ServerResult, Navigate, OnClickCallback, OnVisibilityCallback} from '../../types';
+import type {RefProps, LinkProps, RouterProps, LinkMiddleware, Match, History, Location, ServerResult, Navigate, OnClickCallback, OnVisibilityCallback} from '../../types';
 
 
 export type RouterContextType = {|
@@ -31,18 +31,6 @@ export const RouterContextPropType = PropTypes.shape({
     linkMiddleware: PropTypes.arrayOf(PropTypes.func).isRequired,
     navigate: PropTypes.func.isRequired
 }).isRequired;
-
-
-type RouterProps = {
-    history: History,
-    addSlashes: boolean,
-    urls: Urls,
-    serverResult?: ServerResult,
-    linkMiddleware: LinkMiddleware[],
-    children?: ?any,
-    onClickCallback?: ?OnClickCallback,
-    onVisibilityCallback?: ?OnVisibilityCallback
-};
 
 const SLASH_RE = /\/$/;
 const VISIBILITY_CHECK_INTERVAL = 200;
