@@ -2,11 +2,11 @@
 import React, {Children, isValidElement} from 'react';
 
 const childToString = (child: Text | boolean | {} | null): string => {
-    if (typeof child === 'undefined' || child === null || typeof child === 'boolean') {
+    if (!child || typeof child === 'boolean') {
         return '';
     }
 
-    return child.toString();
+    return child.toString().replace('[object Object]', '');
 };
 
 const hasChildren = (element: React.Children): boolean =>

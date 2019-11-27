@@ -59,9 +59,9 @@ class Link extends React.PureComponent {
     static contextTypes = {router: RouterContextPropType};
     context: {router: RouterContextType};
     props: Props;
-    ref: HTMLElement | null
+    ref: ?HTMLElement
 
-    setRef = (e: HTMLElement | null) => {
+    setRef = (e: ?HTMLElement) => {
         if (e) {
             this.context.router.visibleRefProps.set(e, this._getCallbackProps());
         } else if (this.ref) {

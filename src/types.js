@@ -55,6 +55,7 @@ export type LinkProps = {
     trackingContext?: ?Array<any>
 };
 
+
 export type LinkCallbackProps = {
     location: Location,
     name: ?string,
