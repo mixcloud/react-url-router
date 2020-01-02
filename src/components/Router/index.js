@@ -2,8 +2,9 @@
 import React, {Children} from 'react';
 import PropTypes from 'prop-types';
 import {Listeners} from '../../utils';
+import {checkRefVisibility} from '../Link/visibility';
 import type Urls from '../../urls';
-import type {LinkProps, LinkMiddleware, Match, History, Location, ServerResult, Navigate} from '../../types';
+import type {RefProps, LinkProps, RouterProps, LinkMiddleware, Match, History, Location, ServerResult, Navigate, OnClickCallback, OnVisibilityCallback} from '../../types';
 
 
 export type RouterContextType = {|
@@ -14,7 +15,10 @@ export type RouterContextType = {|
     location: Location,
     listen: (callback: () => void) => () => void,
     linkMiddleware: LinkMiddleware[],
-    navigate: Navigate
+    navigate: Navigate,
+    onClickCallback?: OnClickCallback | null,
+    onVisibilityCallback?: OnVisibilityCallback | null,
+    visibleRefProps: RefProps
 |};
 
 export const RouterContextPropType = PropTypes.shape({
@@ -28,17 +32,8 @@ export const RouterContextPropType = PropTypes.shape({
     navigate: PropTypes.func.isRequired
 }).isRequired;
 
-
-type RouterProps = {
-    history: History,
-    addSlashes: boolean,
-    urls: Urls,
-    serverResult?: ServerResult,
-    linkMiddleware: LinkMiddleware[],
-    children?: ?any
-};
-
 const SLASH_RE = /\/$/;
+const VISIBILITY_CHECK_INTERVAL = 200;
 
 export default class Router extends React.Component {
     static displayName = 'Router';
@@ -50,6 +45,8 @@ export default class Router extends React.Component {
 
     _listeners = new Listeners();
     _unlisten: ?() => void;
+
+    _visibilityInterval: ?number = null;
 
     static childContextTypes = {router: RouterContextPropType};
     getChildContext = (): {router: RouterContextType} => ({router: this.routerContext});
@@ -69,7 +66,9 @@ export default class Router extends React.Component {
             } else {
                 this.routerContext.history.push(location);
             }
-        }
+        },
+        onClickCallback: this.props.onClickCallback,
+        visibleRefProps: new Map()
     };
 
     _updateLocation = location => {
@@ -88,6 +87,12 @@ export default class Router extends React.Component {
             this._listeners.notify();
         }
     };
+
+    _visibleRefChecker = () => {
+        if (this.props.onVisibilityCallback) {
+            checkRefVisibility(this.routerContext.visibleRefProps, this.props.onVisibilityCallback);
+        }
+    }
 
     _slashUrlPath = location => {
         // See if there is a url with slashes that we can redirect to
@@ -116,6 +121,8 @@ export default class Router extends React.Component {
         const {history} = this.props;
         this._unlisten = history.listen(this._updateLocation);
 
+        this._visibilityInterval = setInterval(this._visibleRefChecker, VISIBILITY_CHECK_INTERVAL);
+
         // To catch early redirects
         this._updateLocation(history.location);
     }
@@ -123,6 +130,10 @@ export default class Router extends React.Component {
     componentWillUnmount() {
         if (this._unlisten) {
             this._unlisten();
+        }
+        if (this._visibilityInterval) {
+            clearInterval(this._visibilityInterval);
+            this._visibilityInterval = null;
         }
     }
 

@@ -1,5 +1,6 @@
 /* @flow */
 import React from 'react';
+import type Urls from './urls';
 
 
 export type ServerResult = {
@@ -50,7 +51,18 @@ export type LinkProps = {
     query?: ?Query,
     state?: ?State,
     hash?: ?string,
-    to?: ?string
+    to?: ?string,
+    trackingContext?: ?Array<any>
+};
+
+
+export type LinkCallbackProps = {
+    location: Location,
+    name: ?string,
+    params?: ?Params,
+    text: ?string,
+    urlName?: ?string,
+    trackingContext?: ?Array<any>
 };
 
 
@@ -61,3 +73,24 @@ export type LinkMiddleware = (props: LinkProps, next: (props: LinkProps) => Reac
 
 
 export type OnNavigateCallback = ({location: Location, match: ?Match}) => void;
+
+
+export type OnClickCallback = (props: LinkCallbackProps) => void;
+
+
+export type OnVisibilityCallback = (props: LinkCallbackProps) => void;
+
+
+export type RefProps = Map<HTMLElement, LinkCallbackProps>;
+
+
+export type RouterProps = {
+    history: History,
+    addSlashes: boolean,
+    urls: Urls,
+    serverResult?: ServerResult,
+    linkMiddleware: LinkMiddleware[],
+    children?: ?any,
+    onClickCallback?: ?OnClickCallback,
+    onVisibilityCallback?: ?OnVisibilityCallback
+};

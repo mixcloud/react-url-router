@@ -3,8 +3,9 @@ import React from 'react';
 import deepEqual from 'deep-equal';
 import withRouter from '../decorators/withRouter';
 import {RouterContextPropType} from '../Router';
+import {onlyText} from './utils';
 import type Urls from '../../urls';
-import type {Params, Query, History, Match, Location} from '../../types';
+import type {Params, Query, History, Match, Location, LinkCallbackProps} from '../../types';
 import type {RouterContextType} from '../Router';
 
 
@@ -48,15 +49,39 @@ type Props = {
     target?: string,
     onClick?: (event: MouseEvent) => void,
     children?: any,
-    isActive?: (match: Match | null, location: Location) => boolean
+    isActive?: (match: Match | null, location: Location) => boolean,
+    name?: ?string,
+    trackingContext?: ?Array<any>
 };
 
 
 class Link extends React.PureComponent {
+    static contextTypes = {router: RouterContextPropType};
+    context: {router: RouterContextType};
     props: Props;
+    ref: ?HTMLElement
+
+    setRef = (e: ?HTMLElement) => {
+        if (e) {
+            this.context.router.visibleRefProps.set(e, this._getCallbackProps());
+        } else if (this.ref) {
+            this.context.router.visibleRefProps.delete(this.ref);
+        }
+        this.ref = e;
+    };
+
+    _getCallbackProps = (): LinkCallbackProps => {
+        const {children, location, name, params, trackingContext, urlName} = this.props;
+        return {location, name, params, text: onlyText(children), trackingContext, urlName};
+    }
 
     onClick = (event) => {
         const {onClick, location, history, target, replace, navigate} = this.props;
+
+        const onClickCallback = this.context.router.onClickCallback;
+        if (onClickCallback) {
+            onClickCallback(this._getCallbackProps());
+        }
 
         if (onClick) {
             onClick(event);
@@ -128,7 +153,7 @@ class Link extends React.PureComponent {
             }
         }
 
-        return <a {...props} />;
+        return <a ref={this.setRef} {...props} />;
     }
 }
 
@@ -154,4 +179,3 @@ class LinkWithMiddleware extends React.PureComponent {
 }
 
 export default withRouter(LinkWithMiddleware);
-
