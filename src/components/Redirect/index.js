@@ -12,7 +12,8 @@ class Redirect extends React.Component {
         replace: false
     };
 
-    componentWillMount() {
+    // eslint-disable-next-line camelcase
+    UNSAFE_componentWillMount() {
         const {serverResult} = this.context.router;
 
         if (serverResult) {

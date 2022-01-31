@@ -138,7 +138,7 @@ describe('<RouteRenderer>', () => {
     it('should call onNavigate upon render', () => {
         const onNavigate = jest.fn();
         const location = {pathname: '/'};
-        const wrapper = mount(
+        mount(
             <RouteRenderer
                 location={location}
                 routes={[
@@ -148,6 +148,6 @@ describe('<RouteRenderer>', () => {
             />,
             {context}
         );
-        expect(onNavigate).toHaveBeenCalledWith({location, match: {urlName: 'home', params: {}}})
+        expect(onNavigate).toHaveBeenCalledWith({location, match: {urlName: 'home', params: {}}});
     });
 });
