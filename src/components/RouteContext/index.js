@@ -28,7 +28,8 @@ export default class RouteContext extends React.PureComponent {
         listen: this._listeners.listen
     };
 
-    componentWillReceiveProps(nextProps: RouteContextProps) {
+    // eslint-disable-next-line camelcase
+    UNSAFE_componentWillReceiveProps(nextProps: RouteContextProps) {
         if (nextProps.match !== this.props.match || nextProps.location !== this.props.location) {
             this.routerContext.match = nextProps.match;
             this.routerContext.location = nextProps.location;

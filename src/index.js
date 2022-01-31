@@ -21,3 +21,23 @@ export {
     withRouter,
     createServerHistory
 };
+
+export type {
+    ServerResult,
+    State,
+    Location,
+    History,
+    UrlConf,
+    Params,
+    Query,
+    Match,
+    LinkProps,
+    LinkCallbackProps,
+    Navigate,
+    LinkMiddleware,
+    OnNavigateCallback,
+    OnClickCallback,
+    OnVisibilityCallback,
+    RefProps,
+    RouterProps
+} from './types';

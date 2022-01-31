@@ -193,7 +193,7 @@ module.exports = {
         "react/jsx-no-comment-textnodes": 2,
         "react/jsx-no-duplicate-props": 2,
         "react/jsx-no-undef": 2,
-        "react/jsx-space-before-closing": 1,
+        "react/jsx-tag-spacing": 1,
         "react/jsx-uses-react": 2,
         "react/jsx-uses-vars": 2,
         "react/jsx-wrap-multilines": 1,
