@@ -9,9 +9,28 @@ import Router from './components/Router';
 import ScrollRestorer from './components/ScrollRestorer';
 import createServerHistory from './createServerHistory';
 
+export type {
+    Urls,
+    ServerResult,
+    State,
+    Location,
+    History,
+    UrlConf,
+    Params,
+    Query,
+    Match,
+    LinkProps,
+    LinkCallbackProps,
+    Navigate,
+    LinkMiddleware,
+    OnNavigateCallback,
+    OnClickCallback,
+    OnVisibilityCallback,
+    RefProps,
+    RouterProps
+} from './types';
 
 export {
-    Urls,
     Router,
     Route,
     Switch,
